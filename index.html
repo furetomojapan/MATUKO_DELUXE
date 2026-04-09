@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MATSUKO DELUXE PORTFOLIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              plum: { 50: '#fdf2f5', 100: '#fbe6ec', 800: '#8b1d3d', 900: '#6b122b', 950: '#4a0a1c' },
+              gold: '#d4af37',
+              magenta: '#ff00ff',
+              paper: '#fcfcfc',
+              dark: '#0a0a0a',
+              soft: '#f5f5f5',
+            },
+            fontFamily: {
+              en: ['Inter', 'sans-serif'],
+              jp: ['"Zen Kaku Gothic New"', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(20px, 20px); }
+      }
+      .bg-flashy-gradient {
+        background: linear-gradient(135deg, #4a0a1c 0%, #8b1d3d 50%, #d4af37 100%);
+      }
+      .noise-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+      .custom-cursor {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        background: #d4af37;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        transition: transform 0.1s ease;
+      }
+      .custom-cursor-outline {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #d4af37;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.3s ease-out;
+      }
+      .text-stroke {
+        -webkit-text-stroke: 1px rgba(139, 29, 61, 0.1);
+        color: transparent;
+      }
+      .text-stroke-white {
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+        color: transparent;
+      }
+      .glass {
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(10px);
+      }
+      .reveal-text {
+        display: inline-block;
+        overflow: hidden;
+      }
+      .reveal-char {
+        display: inline-block;
+        transform: translateY(100%);
+        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .reveal-char.active {
+        transform: translateY(0);
+      }
+      .scroll-fade {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .scroll-fade.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .parallax-text {
+        transition: transform 0.1s ease-out;
+      }
+      html { scroll-behavior: smooth; }
+      body { cursor: none; }
+      @media (max-width: 768px) {
+        body { cursor: auto; }
+        .custom-cursor, .custom-cursor-outline { display: none; }
+      }
+
+      /* Detail View Overlay */
+      #detail-view {
+        position: fixed;
+        inset: 0;
+        background: #0a0a0a;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        overflow-y: auto;
+      }
+      #detail-view.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .detail-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 120px 24px;
+      }
+    </style>
+  </head>
+  <body class="bg-paper font-jp selection:bg-plum-900 selection:text-white overflow-x-hidden">
+    <div class="noise-overlay"></div>
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-outline" id="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-[100] p-6 md:p-10 flex justify-between items-center glass text-white">
+      <div class="font-en font-extrabold text-3xl tracking-tighter text-gold">MATSUKO.</div>
+      <div class="hidden md:flex gap-12 font-en text-[10px] font-bold uppercase tracking-[0.3em]">
+        <a href="#profile" class="hover:text-gold transition-colors">Profile</a>
+        <a href="#works" class="hover:text-gold transition-colors">Works</a>
+        <a href="#schedule" class="hover:text-gold transition-colors">Schedule</a>
+        <a href="#essence" class="hover:text-gold transition-colors">Essence</a>
+        <a href="#faq" class="hover:text-gold transition-colors">FAQ</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden px-6 bg-flashy-gradient">
+      <div class="absolute inset-0 opacity-20 pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-magenta rounded-full blur-[120px]" style="animation: float 10s infinite"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold rounded-full blur-[120px]" style="animation: float 12s infinite reverse"></div>
+      </div>
+
+      <div class="max-w-7xl w-full relative z-10 text-white text-center">
+        <span class="font-en text-xs font-bold tracking-[0.8em] uppercase mb-8 text-gold block">The Ultimate Icon</span>
+        <h1 class="text-5xl md:text-[12vw] font-bold leading-[0.9] mb-12 drop-shadow-2xl reveal-text" id="hero-title">
+          マツコ・デラックス
+        </h1>
+        <p class="text-xl md:text-4xl font-light leading-relaxed max-w-4xl mx-auto scroll-fade">
+          『アタシなんて…』と笑いながら、<br />
+          <span class="text-gold font-bold">誰よりも本質を突く。</span>
+        </p>
+      </div>
+
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+        <span class="font-en text-[10px] font-bold tracking-[0.5em] uppercase text-gold">Explore</span>
+        <div class="w-px h-16 bg-gradient-to-b from-gold to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="py-32 md:py-60 px-6 bg-paper relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-soft -z-10"></div>
+      <div class="absolute -left-20 top-40 font-en text-[25vw] font-black text-stroke select-none pointer-events-none parallax-text" data-speed="-0.1">
+        DELUXE
+      </div>
+      
+      <div class="max-w-7xl mx-auto relative">
+        <div class="mb-16 md:mb-32">
+          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="0.05">BIOGRAPHY</span>
+          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">人物像と歩み</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-12 gap-20 items-center">
+          <div class="md:col-span-6 relative scroll-fade">
+            <div class="relative z-10 shadow-[60px_60px_0px_0px_rgba(139,29,61,0.05)]">
+              <img src="img/profile.png" alt="Matsuko" class="w-full grayscale hover:grayscale-0 transition-all duration-1000">
+            </div>
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-plum-900 -z-10"></div>
+          </div>
+
+          <div class="md:col-span-6 space-y-16">
+            <div class="scroll-fade">
+              <span class="font-en text-xs font-bold text-plum-800 mb-6 block tracking-[0.3em]">01. ORIGIN</span>
+              <p class="text-xl md:text-2xl leading-loose text-neutral-800">
+                美容専門学校を卒業後、ゲイ雑誌『Badi』の編集部に入社。記者・編集者としての経験が、現在の鋭い言語感覚と客観的な視点の礎となった。
+              </p>
+            </div>
+            <div class="scroll-fade">
+              <span class="font-en text-xs font-bold text-plum-800 mb-6 block tracking-[0.3em]">02. DISCOVERY</span>
+              <p class="text-xl md:text-2xl leading-loose text-neutral-800">
+                小説家・中村うさぎ氏にその文才を見出され、コラムニストとして独立。メディアという巨大な鏡の中で、自らを「マツコ・デラックス」として再定義する。
+              </p>
+            </div>
+            <div class="scroll-fade">
+              <span class="font-en text-xs font-bold text-plum-800 mb-6 block tracking-[0.3em]">03. PHENOMENON</span>
+              <p class="text-xl md:text-2xl leading-loose text-neutral-800">
+                『5時に夢中!』でのブレイクを経て、国民的スターへ。毒舌の裏に潜む深い慈愛とリスペクトが、世代を超えた圧倒的な支持を集めている。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Works Section -->
+    <section id="works" class="py-32 md:py-60 bg-dark text-white overflow-hidden relative">
+      <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none font-en text-[30vw] font-black text-stroke-white select-none parallax-text" data-speed="0.1">
+        WORKS
+      </div>
+      
+      <div class="px-6 mb-24 max-w-7xl mx-auto relative z-10">
+        <div class="text-right">
+          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="-0.05">BROADCAST</span>
+          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">主な出演番組</h2>
+        </div>
+      </div>
+
+      <div class="flex overflow-x-auto pb-20 px-6 md:px-20 gap-12 no-scrollbar relative z-10">
+        <!-- Work Cards -->
+        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+            <img src="img/work_01.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2011-</div>
+          </div>
+          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">TBS</span>
+          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">マツコの知らない世界</h3>
+        </div>
+        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+            <img src="img/work_02.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2012-</div>
+          </div>
+          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">NTV</span>
+          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">月曜から夜ふかし</h3>
+        </div>
+        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+            <img src="img/work_03.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2017-</div>
+          </div>
+          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">EX</span>
+          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">かりそめ天国</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-32 md:py-60 bg-dark text-white overflow-hidden relative border-t border-white/5">
+      <div class="max-w-4xl mx-auto px-6 relative z-10">
+        <div class="mb-24">
+          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="0.05">SCHEDULE</span>
+          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">出演・イベント予定</h2>
+          <p class="text-white/40 mt-4 font-jp text-sm">※項目をタップすると詳細が表示されます</p>
+        </div>
+
+        <div id="schedule-container" class="space-y-8">
+          <!-- スケジュールがここに読み込まれます -->
+          <div class="animate-pulse flex space-x-4">
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-2 bg-white/10 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-2 bg-white/10 rounded col-span-2"></div>
+                  <div class="h-2 bg-white/10 rounded col-span-1"></div>
+                </div>
+                <div class="h-2 bg-white/10 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detail View Overlay -->
+    <div id="detail-view">
+      <div class="detail-content">
+        <button onclick="closeDetail()" class="group flex items-center gap-4 text-gold font-en font-bold uppercase tracking-widest mb-16 hover:opacity-50 transition-opacity">
+          <i data-lucide="arrow-left" class="w-6 h-6"></i>
+          Back to Schedule
+        </button>
+        
+        <div id="detail-body" class="space-y-12">
+          <!-- 詳細内容がここに読み込まれます -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Essence Section -->
+    <section id="essence" class="py-32 md:py-60 px-6 bg-paper relative overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-32">
+          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="0.05">PHILOSOPHY</span>
+          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">マツコ・デラックスの本質</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-x-24 gap-y-40">
+          <div class="scroll-fade">
+            <h3 class="text-3xl md:text-5xl font-bold mb-8 leading-tight text-plum-950">圧倒的な「共感力」と「客観性」</h3>
+            <div class="w-24 h-1 bg-gold mb-8"></div>
+            <p class="text-xl md:text-2xl text-neutral-600 leading-loose">マイノリティとしての視点を持ちながらも、常に「一般大衆がどう感じるか」という客観的な視点を忘れません。</p>
+          </div>
+          <div class="scroll-fade md:mt-40">
+            <h3 class="text-3xl md:text-5xl font-bold mb-8 leading-tight text-plum-950">毒舌の裏にある「優しさ」</h3>
+            <div class="w-24 h-1 bg-gold mb-8"></div>
+            <p class="text-xl md:text-2xl text-neutral-600 leading-loose">相手をイジったり厳しい意見を言ったりしても、決して見下すことはなく、その裏には相手への人間的な興味があります。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="py-40 md:py-80 bg-flashy-gradient text-white px-6 text-center relative overflow-hidden">
+      <div class="max-w-5xl mx-auto relative z-10 scroll-fade">
+        <i data-lucide="quote" class="mx-auto mb-16 text-gold opacity-50 w-24 h-24"></i>
+        <p class="text-3xl md:text-[6vw] font-bold leading-[1.2] mb-20 drop-shadow-2xl">
+          「アタシは、自分が何者かなんて<br />
+          一生わからないまま死んでいくんだと思うわ。」
+        </p>
+        <div class="inline-flex items-center gap-8">
+          <div class="w-20 h-px bg-gold"></div>
+          <span class="font-en text-lg font-bold tracking-[0.8em] uppercase text-gold">Matsuko Deluxe</span>
+          <div class="w-20 h-px bg-gold"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-32 bg-dark text-white px-6 text-center">
+      <h2 class="font-en text-5xl md:text-8xl font-extrabold tracking-tighter mb-8 text-gold">MATSUKO DELUXE</h2>
+      <p class="opacity-40 text-sm tracking-widest uppercase font-en">© 2026 Portfolio. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+      // Initialize Lucide Icons
+      lucide.createIcons();
+
+      // Custom Cursor
+      const cursor = document.getElementById('cursor');
+      const cursorOutline = document.getElementById('cursor-outline');
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        cursorOutline.style.left = e.clientX + 'px';
+        cursorOutline.style.top = e.clientY + 'px';
+      });
+
+      // Hero Title Animation
+      const heroTitle = document.getElementById('hero-title');
+      const text = heroTitle.innerText;
+      heroTitle.innerHTML = text.split('').map((char, i) => 
+        `<span class="reveal-char" style="transition-delay: ${i * 0.05}s">${char}</span>`
+      ).join('');
+      setTimeout(() => {
+        document.querySelectorAll('.reveal-char').forEach(el => el.classList.add('active'));
+      }, 100);
+
+      // Scroll Animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.scroll-fade').forEach(el => observer.observe(el));
+
+      // Parallax Effect
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        document.querySelectorAll('.parallax-text').forEach(el => {
+          const speed = el.getAttribute('data-speed');
+          el.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+      });
+
+      // Google Sheets Schedule Integration
+      const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOiIIw17_2iiuYfUvvua2Vmc2g-tkR1h-MdrIMQWzWevMDXCyJWBUe-fMtlDzN1hi_IzRu_GZtkcf/pub?gid=0&single=true&output=csv";
+
+      async function fetchSchedule() {
+        try {
+          const response = await fetch(SHEET_CSV_URL);
+          const csvText = await response.text();
+          
+          Papa.parse(csvText, {
+            header: false,
+            skipEmptyLines: 'greedy',
+            complete: (results) => {
+              if (results.data && results.data.length > 1) {
+                renderSchedule(results.data.slice(1));
+              } else {
+                document.getElementById('schedule-container').innerHTML = '<p class="text-white/40 font-jp">予定はありません。</p>';
+              }
+            }
+          });
+        } catch (error) {
+          console.error("Failed to fetch schedule:", error);
+          document.getElementById('schedule-container').innerHTML = '<p class="text-white/40 font-jp">スケジュールの読み込みに失敗しました。</p>';
+        }
+      }
+
+      function renderSchedule(data) {
+        const container = document.getElementById('schedule-container');
+        container.innerHTML = '';
+
+        data.forEach((cells, idx) => {
+          const date = cells[0] || "";
+          const event = cells[1] || "";
+          const time = cells[2] || "";
+          const location = cells[3] || "";
+          const detail = cells[4] || "";
+          const url = cells[5] || "";
+          const mapUrl = cells[6] || "";
+
+          if (!date && !event) return;
+
+          const item = document.createElement('div');
+          item.className = `group bg-white/5 border border-white/10 hover:bg-white/10 transition-all p-8 md:p-10 rounded-2xl scroll-fade ${detail ? 'cursor-pointer' : ''}`;
+          
+          if (detail) {
+            item.onclick = () => openDetail({ date, event, time, location, detail, url, mapUrl });
+          }
+
+          item.innerHTML = `
+            <div class="flex flex-col md:flex-row gap-6 md:gap-12">
+              <div class="md:w-1/4">
+                <span class="text-gold font-en text-2xl font-bold tracking-tighter">${date}</span>
+              </div>
+              <div class="md:w-3/4 space-y-4">
+                <div class="flex justify-between items-start gap-4">
+                  <h3 class="text-2xl md:text-3xl font-bold leading-tight group-hover:text-gold transition-colors">${event}</h3>
+                  ${detail ? '<i data-lucide="chevron-right" class="w-6 h-6 text-gold opacity-0 group-hover:opacity-100 transition-all"></i>' : ''}
+                </div>
+                <div class="flex flex-wrap gap-6 text-white/60 text-sm">
+                  ${time ? `<div class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-gold"></i><span>${time}</span></div>` : ''}
+                  ${location ? `<div class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold"></i><span>${location}</span></div>` : ''}
+                </div>
+                ${(url || mapUrl) ? `
+                  <div class="flex flex-wrap gap-4 pt-4">
+                    ${url ? `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 text-gold hover:bg-gold hover:text-dark rounded-full transition-all text-xs font-bold border border-gold/20"><i data-lucide="external-link" class="w-3 h-3"></i>詳細</a>` : ''}
+                    ${mapUrl ? `<a href="${mapUrl}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white rounded-full transition-all text-xs font-bold border border-white/10"><i data-lucide="map" class="w-3 h-3"></i>MAP</a>` : ''}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          container.appendChild(item);
+          observer.observe(item);
+        });
+        lucide.createIcons();
+      }
+
+      function openDetail(data) {
+        const detailView = document.getElementById('detail-view');
+        const detailBody = document.getElementById('detail-body');
+        
+        // Format detail text with line breaks
+        const formattedDetail = data.detail.replace(/\n/g, '<br>');
+
+        detailBody.innerHTML = `
+          <div class="space-y-4">
+            <span class="text-gold font-en text-xl font-bold tracking-tighter">${data.date}</span>
+            <h2 class="text-4xl md:text-6xl font-bold leading-tight">${data.event}</h2>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-8 py-8 border-y border-white/10">
+            ${data.time ? `<div><span class="block text-xs text-white/40 uppercase tracking-widest mb-2">Time</span><p class="text-xl">${data.time}</p></div>` : ''}
+            ${data.location ? `<div><span class="block text-xs text-white/40 uppercase tracking-widest mb-2">Location</span><p class="text-xl">${data.location}</p></div>` : ''}
+          </div>
+
+          <div class="prose prose-invert max-w-none">
+            <p class="text-xl md:text-2xl leading-relaxed text-white/80 font-jp">
+              ${formattedDetail}
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-6 pt-12">
+            ${data.url ? `<a href="${data.url}" target="_blank" class="inline-flex items-center gap-4 px-8 py-4 bg-gold text-dark rounded-full hover:bg-white transition-all font-bold uppercase tracking-widest text-sm"><i data-lucide="external-link" class="w-5 h-5"></i>Official Link</a>` : ''}
+            ${data.mapUrl ? `<a href="${data.mapUrl}" target="_blank" class="inline-flex items-center gap-4 px-8 py-4 border border-white/20 text-white hover:bg-white/10 rounded-full transition-all font-bold uppercase tracking-widest text-sm"><i data-lucide="map" class="w-5 h-5"></i>Google Maps</a>` : ''}
+          </div>
+        `;
+        
+        detailView.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        lucide.createIcons();
+      }
+
+      function closeDetail() {
+        const detailView = document.getElementById('detail-view');
+        detailView.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scroll
+      }
+
+      fetchSchedule();
+    </script>
+  </body>
+</html>
+
