@@ -547,10 +547,11 @@
                   ${time ? `<div class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-gold"></i><span>${time}</span></div>` : ''}
                   ${location ? `<div class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold"></i><span>${location}</span></div>` : ''}
                 </div>
-                ${(url || mapUrl) ? `
+                ${detail ? `
                   <div class="flex flex-wrap gap-4 pt-4">
-                    ${url ? `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 text-gold hover:bg-gold hover:text-dark rounded-full transition-all text-xs font-bold border border-gold/20"><i data-lucide="external-link" class="w-3 h-3"></i>詳細</a>` : ''}
-                    ${mapUrl ? `<a href="${mapUrl}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white rounded-full transition-all text-xs font-bold border border-white/10"><i data-lucide="map" class="w-3 h-3"></i>MAP</a>` : ''}
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 text-gold group-hover:bg-gold group-hover:text-dark rounded-full transition-all text-xs font-bold border border-gold/20">
+                      <i data-lucide="maximize-2" class="w-3 h-3"></i>詳細
+                    </div>
                   </div>
                 ` : ''}
               </div>
@@ -592,8 +593,7 @@
           </div>
 
           <div class="flex flex-wrap gap-6 pt-12">
-            ${data.url ? `<a href="${data.url}" target="_blank" class="inline-flex items-center gap-4 px-8 py-4 bg-gold text-dark rounded-full hover:bg-white transition-all font-bold uppercase tracking-widest text-sm"><i data-lucide="external-link" class="w-5 h-5"></i>Official Link</a>` : ''}
-            ${data.mapUrl ? `<a href="${data.mapUrl}" target="_blank" class="inline-flex items-center gap-4 px-8 py-4 border border-white/20 text-white hover:bg-white/10 rounded-full transition-all font-bold uppercase tracking-widest text-sm"><i data-lucide="map" class="w-5 h-5"></i>Google Maps</a>` : ''}
+            ${data.mapUrl ? `<a href="${data.mapUrl}" target="_blank" class="inline-flex items-center gap-4 px-8 py-4 bg-gold text-dark rounded-full hover:bg-white transition-all font-bold uppercase tracking-widest text-sm"><i data-lucide="map" class="w-5 h-5"></i>Google Maps</a>` : ''}
           </div>
         `;
         
