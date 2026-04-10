@@ -498,8 +498,8 @@
             header: false,
             skipEmptyLines: 'greedy',
             complete: (results) => {
-              if (results.data && results.data.length > 1) {
-                renderInformation(results.data.slice(1));
+              if (results.data && results.data.length > 2) {
+                renderInformation(results.data.slice(2));
               } else {
                 document.getElementById('information-container').innerHTML = '<p class="text-white/40 font-jp">お知らせはありません。</p>';
               }
