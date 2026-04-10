@@ -150,6 +150,22 @@
         color: #0a0a0a;
         border-color: #d4af37;
       }
+      .works-slider-wrapper {
+        position: relative;
+        padding: 0 40px;
+      }
+      .slider-nav-btn.absolute {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20;
+      }
+      .slider-nav-btn.prev { left: 10px; }
+      .slider-nav-btn.next { right: 10px; }
+      @media (max-width: 768px) {
+        .works-slider-wrapper { padding: 0; }
+        .slider-nav-btn.absolute { display: none; }
+      }
 
       /* Detail View Overlay */
       #detail-view {
@@ -265,60 +281,61 @@
         WORKS
       </div>
       
-      <div class="px-6 mb-12 max-w-7xl mx-auto relative z-10 flex justify-between items-end">
+      <div class="px-6 mb-12 max-w-7xl mx-auto relative z-10">
         <div class="text-left">
           <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="-0.05">BROADCAST</span>
           <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">主な出演番組</h2>
         </div>
-        <div class="flex gap-4 mb-4 md:mb-8">
-          <button id="prev-work" class="slider-nav-btn" aria-label="Previous">
-            <i data-lucide="chevron-left"></i>
-          </button>
-          <button id="next-work" class="slider-nav-btn" aria-label="Next">
-            <i data-lucide="chevron-right"></i>
-          </button>
-        </div>
       </div>
 
-      <div class="works-slider-container relative z-10" id="works-slider">
-        <!-- Work Cards -->
-        <div class="work-card group scroll-fade">
-          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
-            <img src="img/work_01.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
-            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2011-</div>
+      <div class="works-slider-wrapper relative z-10">
+        <button id="prev-work" class="slider-nav-btn absolute prev" aria-label="Previous">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <button id="next-work" class="slider-nav-btn absolute next" aria-label="Next">
+          <i data-lucide="chevron-right"></i>
+        </button>
+        
+        <div class="works-slider-container" id="works-slider">
+          <!-- Work Cards -->
+          <div class="work-card group scroll-fade">
+            <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+              <img src="img/work_01.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+              <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2011-</div>
+            </div>
+            <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">TBS</span>
+            <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">マツコの知らない世界</h3>
           </div>
-          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">TBS</span>
-          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">マツコの知らない世界</h3>
-        </div>
 
-        <div class="work-card group scroll-fade">
-          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
-            <img src="img/work_02.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
-            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2012-</div>
+          <div class="work-card group scroll-fade">
+            <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+              <img src="img/work_02.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+              <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2012-</div>
+            </div>
+            <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">NTV</span>
+            <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">月曜から夜ふかし</h3>
           </div>
-          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">NTV</span>
-          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">月曜から夜ふかし</h3>
-        </div>
 
-        <div class="work-card group scroll-fade">
-          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
-            <img src="img/work_03.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
-            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2017-</div>
+          <div class="work-card group scroll-fade">
+            <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+              <img src="img/work_03.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+              <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2017-</div>
+            </div>
+            <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">EX</span>
+            <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">かりそめ天国</h3>
           </div>
-          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">EX</span>
-          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">かりそめ天国</h3>
-        </div>
 
-        <div class="work-card group scroll-fade">
-          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
-            <img src="img/work_04.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
-            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2005-</div>
+          <div class="work-card group scroll-fade">
+            <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+              <img src="img/work_04.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+              <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2005-</div>
+            </div>
+            <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">MX</span>
+            <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">5時に夢中!</h3>
           </div>
-          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">MX</span>
-          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">5時に夢中!</h3>
+          <!-- Spacer for end padding -->
+          <div class="flex-shrink-0 w-6 md:w-20"></div>
         </div>
-        <!-- Spacer for end padding -->
-        <div class="flex-shrink-0 w-6 md:w-20"></div>
       </div>
     </section>
 
@@ -545,12 +562,17 @@
         lucide.createIcons();
       }
 
+      function linkify(text) {
+        const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        return text.replace(urlPattern, '<a href="$1" target="_blank" class="text-gold underline hover:opacity-70 transition-opacity" onclick="event.stopPropagation()">$1</a>');
+      }
+
       function openDetail(data) {
         const detailView = document.getElementById('detail-view');
         const detailBody = document.getElementById('detail-body');
         
-        // Format detail text with line breaks
-        const formattedDetail = data.detail.replace(/\n/g, '<br>');
+        // Format detail text with line breaks and links
+        const formattedDetail = linkify(data.detail).replace(/\n/g, '<br>');
 
         detailBody.innerHTML = `
           <div class="space-y-4">
