@@ -109,6 +109,48 @@
         .custom-cursor, .custom-cursor-outline { display: none; }
       }
 
+      /* Works Slider */
+      .works-slider-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        gap: 2rem;
+        padding: 0 24px;
+      }
+      .works-slider-container::-webkit-scrollbar {
+        display: none;
+      }
+      .work-card {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+      }
+      @media (min-width: 768px) {
+        .work-card {
+          flex: 0 0 60%;
+        }
+      }
+      .slider-nav-btn {
+        width: 60px;
+        height: 60px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        transition: all 0.3s ease;
+        background: rgba(10, 10, 10, 0.5);
+        backdrop-filter: blur(5px);
+      }
+      .slider-nav-btn:hover {
+        background: #d4af37;
+        color: #0a0a0a;
+        border-color: #d4af37;
+      }
+
       /* Detail View Overlay */
       #detail-view {
         position: fixed;
@@ -142,7 +184,7 @@
       <div class="hidden md:flex gap-12 font-en text-[10px] font-bold uppercase tracking-[0.3em]">
         <a href="#profile" class="hover:text-gold transition-colors">Profile</a>
         <a href="#works" class="hover:text-gold transition-colors">Works</a>
-        <a href="#schedule" class="hover:text-gold transition-colors">Schedule</a>
+        <a href="#information" class="hover:text-gold transition-colors">Information</a>
         <a href="#essence" class="hover:text-gold transition-colors">Essence</a>
         <a href="#faq" class="hover:text-gold transition-colors">FAQ</a>
       </div>
@@ -223,16 +265,24 @@
         WORKS
       </div>
       
-      <div class="px-6 mb-24 max-w-7xl mx-auto relative z-10">
-        <div class="text-right">
+      <div class="px-6 mb-12 max-w-7xl mx-auto relative z-10 flex justify-between items-end">
+        <div class="text-left">
           <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="-0.05">BROADCAST</span>
           <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">主な出演番組</h2>
         </div>
+        <div class="flex gap-4 mb-4 md:mb-8">
+          <button id="prev-work" class="slider-nav-btn" aria-label="Previous">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <button id="next-work" class="slider-nav-btn" aria-label="Next">
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="flex overflow-x-auto pb-20 px-6 md:px-20 gap-12 no-scrollbar relative z-10">
+      <div class="works-slider-container relative z-10" id="works-slider">
         <!-- Work Cards -->
-        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+        <div class="work-card group scroll-fade">
           <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
             <img src="img/work_01.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
             <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2011-</div>
@@ -240,7 +290,8 @@
           <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">TBS</span>
           <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">マツコの知らない世界</h3>
         </div>
-        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+
+        <div class="work-card group scroll-fade">
           <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
             <img src="img/work_02.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
             <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2012-</div>
@@ -248,7 +299,8 @@
           <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">NTV</span>
           <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">月曜から夜ふかし</h3>
         </div>
-        <div class="flex-shrink-0 w-[300px] md:w-[500px] group scroll-fade">
+
+        <div class="work-card group scroll-fade">
           <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
             <img src="img/work_03.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
             <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2017-</div>
@@ -256,20 +308,31 @@
           <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">EX</span>
           <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">かりそめ天国</h3>
         </div>
+
+        <div class="work-card group scroll-fade">
+          <div class="aspect-[16/10] bg-neutral-800 mb-8 overflow-hidden relative border border-white/10 group-hover:border-gold/50 transition-colors">
+            <img src="img/work_04.png" class="w-full h-full object-cover opacity-40 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700">
+            <div class="absolute top-6 left-6 font-en text-[10px] font-bold tracking-widest bg-gold text-dark px-3 py-1">2005-</div>
+          </div>
+          <span class="font-en text-xs font-bold text-gold mb-2 block tracking-widest">MX</span>
+          <h3 class="text-3xl md:text-4xl font-bold group-hover:text-gold transition-colors">5時に夢中!</h3>
+        </div>
+        <!-- Spacer for end padding -->
+        <div class="flex-shrink-0 w-6 md:w-20"></div>
       </div>
     </section>
 
-    <!-- Schedule Section -->
-    <section id="schedule" class="py-32 md:py-60 bg-dark text-white overflow-hidden relative border-t border-white/5">
+    <!-- Information Section -->
+    <section id="information" class="py-32 md:py-60 bg-dark text-white overflow-hidden relative border-t border-white/5">
       <div class="max-w-4xl mx-auto px-6 relative z-10">
         <div class="mb-24">
-          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="0.05">SCHEDULE</span>
-          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">出演・イベント予定</h2>
+          <span class="font-en text-7xl md:text-[12vw] font-extrabold opacity-5 block leading-none select-none whitespace-nowrap parallax-text" data-speed="0.05">INFORMATION</span>
+          <h2 class="text-4xl md:text-6xl font-bold -mt-10 md:-mt-20 relative z-10 scroll-fade">お知らせ・出演予定</h2>
           <p class="text-white/40 mt-4 font-jp text-sm">※項目をタップすると詳細が表示されます</p>
         </div>
 
-        <div id="schedule-container" class="space-y-8">
-          <!-- スケジュールがここに読み込まれます -->
+        <div id="information-container" class="space-y-8">
+          <!-- お知らせがここに読み込まれます -->
           <div class="animate-pulse flex space-x-4">
             <div class="flex-1 space-y-6 py-1">
               <div class="h-2 bg-white/10 rounded"></div>
@@ -291,7 +354,7 @@
       <div class="detail-content">
         <button onclick="closeDetail()" class="group flex items-center gap-4 text-gold font-en font-bold uppercase tracking-widest mb-16 hover:opacity-50 transition-opacity">
           <i data-lucide="arrow-left" class="w-6 h-6"></i>
-          Back to Schedule
+          Back to Information
         </button>
         
         <div id="detail-body" class="space-y-12">
@@ -389,10 +452,27 @@
         });
       });
 
-      // Google Sheets Schedule Integration
+      // Works Slider Logic
+      const worksSlider = document.getElementById('works-slider');
+      const prevBtn = document.getElementById('prev-work');
+      const nextBtn = document.getElementById('next-work');
+
+      if (worksSlider && prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', () => {
+          const scrollAmount = worksSlider.clientWidth * 0.8;
+          worksSlider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+          const scrollAmount = worksSlider.clientWidth * 0.8;
+          worksSlider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+      }
+
+      // Google Sheets Information Integration
       const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOiIIw17_2iiuYfUvvua2Vmc2g-tkR1h-MdrIMQWzWevMDXCyJWBUe-fMtlDzN1hi_IzRu_GZtkcf/pub?gid=0&single=true&output=csv";
 
-      async function fetchSchedule() {
+      async function fetchInformation() {
         try {
           const response = await fetch(SHEET_CSV_URL);
           const csvText = await response.text();
@@ -402,20 +482,20 @@
             skipEmptyLines: 'greedy',
             complete: (results) => {
               if (results.data && results.data.length > 1) {
-                renderSchedule(results.data.slice(1));
+                renderInformation(results.data.slice(1));
               } else {
-                document.getElementById('schedule-container').innerHTML = '<p class="text-white/40 font-jp">予定はありません。</p>';
+                document.getElementById('information-container').innerHTML = '<p class="text-white/40 font-jp">お知らせはありません。</p>';
               }
             }
           });
         } catch (error) {
-          console.error("Failed to fetch schedule:", error);
-          document.getElementById('schedule-container').innerHTML = '<p class="text-white/40 font-jp">スケジュールの読み込みに失敗しました。</p>';
+          console.error("Failed to fetch information:", error);
+          document.getElementById('information-container').innerHTML = '<p class="text-white/40 font-jp">お知らせの読み込みに失敗しました。</p>';
         }
       }
 
-      function renderSchedule(data) {
-        const container = document.getElementById('schedule-container');
+      function renderInformation(data) {
+        const container = document.getElementById('information-container');
         container.innerHTML = '';
 
         data.forEach((cells, idx) => {
@@ -506,7 +586,7 @@
         document.body.style.overflow = ''; // Restore scroll
       }
 
-      fetchSchedule();
+      fetchInformation();
     </script>
   </body>
 </html>
